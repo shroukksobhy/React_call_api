@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, FormLabel, FormGroup, Button, TextField, Container, Alert } from '@mui/material';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, FormLabel, Grid, Button, TextField, Container, Alert } from '@mui/material';
 import axios from 'axios';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -11,8 +10,7 @@ import { styled } from '@mui/material/styles';
 import { blue, red } from '@mui/material/colors';
 import ReactJson from 'react-json-view'
 
-const babyRedcolor = red[100];
-const babyBluecolor = blue[100];
+const babyRedcolor = blue[20];
 
 function Home() {
     let [url, setURL] = useState("");
@@ -21,42 +19,79 @@ function Home() {
     let [value, setValue] = useState('1');
     let [error, setError] = useState("");
     let [rowJson, setRowJson] = useState([]);
-
+    let [status, setStatus] = useState("");
     const Item = styled(Paper)(({ theme }) => ({
         ...theme.typography.body2,
         padding: theme.spacing(1),
         textAlign: 'center',
         color: theme.palette.text.secondary,
     }));
+    function axiosBasedOnMethod(method) {
+        if (method === "post") {
+            axios.post(`${url} `, rowJson)
+                .then(res => {
+                    setStatus(res.status);
+                    setResponse(res.data);
+                })
+                .catch((error) => {
+                    setStatus(error.response.status);
+                    setResponse(error.response.data)
+                });
+        } else if (method === "put") {
+            axios.put(`${url} `, rowJson)
+                .then(res => {
+                    setStatus(res.status);
+                    setResponse(res.data);
+                })
+                .catch((error) => {
+                    setStatus(error.response.status);
+                    setResponse(error.response.data)
+                });
+        } else if (method === "delete") {
+            axios.delete(`${url} `, rowJson)
+                .then(res => {
+                    setStatus(res.status);
+                    setResponse(res.data);
+                })
+                .catch((error) => {
+                    setStatus(error.response.status);
+                    setResponse(error.response.data)
+                });
+        }
+    }
     function onSubmit(e) {
         e.preventDefault();
+        setResponse([])
         if (url) {
-            method === "get" ?
-                axios.get(`${url}`)
+            if (method === "get") {
+                axios.get(`${url} `)
                     .then(res => {
-                        console.log(res.data)
+                        setStatus(res.status);
                         setResponse(res.data);
-                    })
-                :
-                axios.post(`${url}`, rowJson)
-                    .then(res => {
-                        console.log(res.data);
-                        setResponse(res.data);
-                    })
-                    .catch((error) => {
-                        console.log(url);
-                        console.log(error);
-                        console.log(error.config.data)
-
+                    }).catch((error) => {
+                        setStatus(error.response.status);
+                        setResponse(error.response.data);
                     });
+            }
+            else if (method === "post") {
+                axiosBasedOnMethod(method);
+            }
+            else if (method === "put") {
+                axiosBasedOnMethod(method);
+            }
+            else if (method === "delete") {
+                axiosBasedOnMethod(method)
+            }
+
         } else {
-            setError("Invalid Request")
+            setError("Endpoint is required")
         }
 
     }
     function handleURL(e) {
         setError("")
         setResponse([]);
+        setStatus("000")
         setURL(e.target.value);
     }
     function handleMethod(e) {
@@ -73,13 +108,12 @@ function Home() {
             });
         }
     }
-    let istrue = true;
     return (
         <>
-            <div style={{ backgroundColor: babyRedcolor }}>
+            <div style={{ backgroundColor: babyRedcolor }} className="shadow">
                 <Container>
-                    <Box p={2} >
-                        <Card>
+                    <Box p={2}>
+                        <Card boxShadow={1} borderRadius={2} >
                             <form onSubmit={onSubmit}>
                                 <Box
                                     lg={{
@@ -97,13 +131,40 @@ function Home() {
                                             <MenuItem value="get">GET</MenuItem>
                                             <MenuItem value="post">POST</MenuItem>
                                             <MenuItem value="put">PUT</MenuItem>
+                                            <MenuItem value="patch">PATCH</MenuItem>
+                                            <MenuItem value="delete">DELETE</MenuItem>
                                         </Select>
                                     </FormControl>
+
                                     <Box p={1}>
                                         <TextField fullWidth label="Enter request URL" variant="outlined" onChange={handleURL} />
                                     </Box>
+                                    {/* Authentication */}
+                                    <Box>
+                                        <TabContext >
+                                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                                <TabList aria-label="lab API tabs example">
+                                                    <Tab label="Authotization" value="1" />
+                                                    <Tab label="Body" value="2" />
+                                                    <Tab label="headers" value="3" />
+                                                </TabList>
+                                            </Box>
+                                            <TabPanel value="1">
+                                                <TextField
+                                                    fullWidth id="fullWidth" lg={{
+                                                        innerHeight: '100px',
+                                                    }}
+
+                                                    onChange={(e) => { handleBody(e) }}
+                                                />
+                                            </TabPanel>
+                                            <TabPanel value="2">Comming soon..</TabPanel>
+                                            <TabPanel value="3">Comming soon..</TabPanel>
+                                        </TabContext>
+                                    </Box>
+                                    {/* Body */}
                                     {
-                                        method == "get" ? <p> GET Request </p> :
+                                        method === "get" || method === "delete" ? <p> {method} Request </p> :
                                             <TabContext value={value}>
                                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                     <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -113,18 +174,16 @@ function Home() {
                                                     </TabList>
                                                 </Box>
                                                 <TabPanel value="1">
-                                                    <TextField fullWidth id="fullWidth" lg={{
-                                                        innerHeight: '100px',
-                                                    }} />
-                                                    <TextareaAutosize
-                                                        maxRows={10}
-                                                        aria-label="maximum height"
-                                                        style={{ width: '100%' }}
+                                                    <TextField
+                                                        fullWidth id="fullWidth" lg={{
+                                                            innerHeight: '100px',
+                                                        }}
+
                                                         onChange={(e) => { handleBody(e) }}
                                                     />
                                                 </TabPanel>
-                                                <TabPanel value="2">Item Two</TabPanel>
-                                                <TabPanel value="3">Item Three</TabPanel>
+                                                <TabPanel value="2">Comming soon..</TabPanel>
+                                                <TabPanel value="3">Comming soon..</TabPanel>
                                             </TabContext>
                                     }
                                 </Box>
@@ -133,16 +192,26 @@ function Home() {
                                 </Box>
                                 {error && <Alert severity="error">{error}</Alert>}
                             </form>
-                            <Box m={2}>
-                                {/* {response} */}
-                                <ReactJson src={response} />
+                            <Box sx={{ flexGrow: 1 }} p={2}>
+                                <Grid container spacing={2}>
+
+                                    <Grid item xs={12} md={4}>
+                                        <Item>{status}</Item>
+                                    </Grid>
+                                    <Grid item xs={12} md={8}>
+                                        <Item>
+                                            <ReactJson src={response} />
+                                        </Item>
+                                    </Grid>
+                                </Grid>
                             </Box>
+
                         </Card>
                     </Box>
-                </Container>
+                </Container >
                 <Divider />
 
-            </div>
+            </div >
 
         </>
     );
