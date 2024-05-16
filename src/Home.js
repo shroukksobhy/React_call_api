@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, FormLabel, Grid, Button, TextField, Container, Alert } from '@mui/material';
+import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert } from '@mui/material';
 import axios from 'axios';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Paper from '@mui/material/Paper';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { styled } from '@mui/material/styles';
-import { blue, red } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 import ReactJson from 'react-json-view'
 
 const babyRedcolor = blue[20];
