@@ -4,10 +4,9 @@ import axios from 'axios';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
-import ReactJson from 'react-json-view'
+import StatusCode from "./components/StatusCode";
+import Response from "./components/Response";
 
 const babyRedcolor = blue[20];
 
@@ -19,12 +18,7 @@ function Home() {
     let [error, setError] = useState("");
     let [rowJson, setRowJson] = useState([]);
     let [status, setStatus] = useState("");
-    const Item = styled(Paper)(({ theme }) => ({
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }));
+
     function axiosBasedOnMethod(method) {
         if (method === "post") {
             axios.post(`${url} `, rowJson)
@@ -193,14 +187,11 @@ function Home() {
                             </form>
                             <Box sx={{ flexGrow: 1 }} p={2}>
                                 <Grid container spacing={2}>
-
                                     <Grid item xs={12} md={4}>
-                                        <Item>{status}</Item>
+                                        <StatusCode status={status} />
                                     </Grid>
                                     <Grid item xs={12} md={8}>
-                                        <Item>
-                                            <ReactJson src={response} />
-                                        </Item>
+                                        <Response response={response} />
                                     </Grid>
                                 </Grid>
                             </Box>
