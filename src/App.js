@@ -1,6 +1,5 @@
 import './App.css';
 import Home from './Home';
-import AppBarComponent from './AppBarComponent'
 function App() {
 
   // axios.post(`https://banquemisr.gateway.mastercard.com/api/rest/version/60/merchant/TESTMERCHTST_EGP/session`, {}, {
@@ -20,7 +19,6 @@ function App() {
   //   })
   return (
     <div className="App">
-      {/* <AppBarComponent /> */}
       <Home />
     </div >
   );
