@@ -21,9 +21,13 @@ You can see the application in action by visiting the following link:
 - HTML
 - CSS
 
-## License
-
-This project is licensed under the MIT License.
+## Installation Instructions
+```bash
+git clone https://github.com/shroukksobhy/React_call_api.git
+cd Advice-app-ReactJS
+npm install
+npm start
+```
 
 ### Author
 
