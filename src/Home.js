@@ -17,6 +17,7 @@ function Home() {
     let [method, setMethod] = useState("get");
     let [response, setResponse] = useState([]);
     let [tab1, setTab1] = useState("body");
+    let [loading, setLoading] = useState(false);
     let [error, setError] = useState("");
     let [rowJson, setRowJson] = useState([]);
     let [status, setStatus] = useState("");
@@ -56,41 +57,46 @@ function Home() {
     }
     function onSubmit(e) {
         e.preventDefault();
-        setResponse([])
-        // console.log(e.target.username.value);
-        console.log(rowJson);
-        if (auth) {
-            console.log("this is authorizedAPI");
-            console.log(auth);
-        } else {
+        setLoading(true); // Start loading
+        setError(null); // Reset error state
+        setResponse([])  // Clear  previous response
 
-            console.log("NOT auth");
+        try {
+            if (url) {
+                if (method === "get") {
+                    axios.get(`${url} `)
+                        .then(res => {
+                            setStatus(res.status);
+                            setResponse(res.data);
+                        }).catch((error) => {
+                            setStatus(error.response.status);
+                            setResponse(error.response.data);
+                        });
+                }
+                else if (method === "post") {
+                    axiosBasedOnMethod(method);
+                }
+                else if (method === "put") {
+                    axiosBasedOnMethod(method);
+                }
+                else if (method === "delete") {
+                    axiosBasedOnMethod(method)
+                }
+    
+            } else {
+                setError("Endpoint is required")
+            }
+        } catch (err) {
+            setError(err.message); // Set error message
+        } finally {
+            setLoading(false); // End loading
         }
-        if (url) {
-            if (method === "get") {
-                axios.get(`${url} `)
-                    .then(res => {
-                        setStatus(res.status);
-                        setResponse(res.data);
-                    }).catch((error) => {
-                        setStatus(error.response.status);
-                        setResponse(error.response.data);
-                    });
-            }
-            else if (method === "post") {
-                axiosBasedOnMethod(method);
-            }
-            else if (method === "put") {
-                axiosBasedOnMethod(method);
-            }
-            else if (method === "delete") {
-                axiosBasedOnMethod(method)
-            }
-
-        } else {
-            setError("Endpoint is required")
-        }
-
+        // if (auth) {
+        //     console.log("this is authorizedAPI");
+        //     console.log(auth);
+        // } else {
+        //     console.log("NOT auth");
+        // }
     }
     function handleURL(e) {
         setError("")
@@ -179,32 +185,20 @@ function Home() {
                                     <Grid item xs={12} md={3}>
                                         <StatusCode status={status} />
                                     </Grid>
+                                    
                                     <Grid item xs={12} md={9}>
-                                        <Response response={response} />
-                                    </Grid>
-                                 
+                                        {loading ? (
+                                            <CircularProgress />
+                                        ) 
+                                        : error ? (
+                                            <Alert severity="error">{error}</Alert>
+                                        )
+                                         : (
+                                            <Response response={response} />
+                                        )}
+                                      </Grid>
                                 </Grid>
                             </Box>
-
-                            {/* <Box sx={{ flexGrow: 1 }} p={2}>
-    <Paper elevation={2} sx={{ padding: 2 }}>
-        <Grid container spacing={2}>
-            <Grid item xs={12} md={3}>
-                <StatusCode status={status} />
-            </Grid>
-            <Grid item xs={12} md={9}>
-                {loading ? (
-                    <CircularProgress />
-                ) : error ? (
-                    <Alert severity="error">{error}</Alert>
-                ) : (
-                    <Response response={response} />
-                )}
-            </Grid>
-        </Grid>
-    </Paper>
-</Box> */}
-
                         </Card>
                     </Box >
                 </Container >
