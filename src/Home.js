@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert, CircularProgress, Paper } from '@mui/material';
+import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -39,39 +39,6 @@ function Home() {
                 setStatus(error.response ? error.response.status : 500); // Handle cases where response is not available
                 setResponse(error.response ? error.response.data : "An error occurred");
             });
-    }
-    function axiosBasedOnMethodOLD(method) {
-        if (method === "post") {
-            axios.post(`${url} `, rowJson)
-                .then(res => {
-                    setStatus(res.status);
-                    setResponse(res.data);
-                })
-                .catch((error) => {
-                    setStatus(error.response.status);
-                    setResponse(error.response.data)
-                });
-        } else if (method === "put") {
-            axios.put(`${url} `, rowJson)
-                .then(res => {
-                    setStatus(res.status);
-                    setResponse(res.data);
-                })
-                .catch((error) => {
-                    setStatus(error.response.status);
-                    setResponse(error.response.data)
-                });
-        } else if (method === "delete") {
-            axios.delete(`${url} `, rowJson)
-                .then(res => {
-                    setStatus(res.status);
-                    setResponse(res.data);
-                })
-                .catch((error) => {
-                    setStatus(error.response.status);
-                    setResponse(error.response.data)
-                });
-        }
     }
     function onSubmit(e) {
         e.preventDefault();
