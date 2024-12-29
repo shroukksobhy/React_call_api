@@ -7,18 +7,19 @@ import TabPanel from '@mui/lab/TabPanel';
 import { blue } from '@mui/material/colors';
 import StatusCode from "./components/StatusCode";
 import Response from "./components/Response";
-
+import RequestBody from "./components/RequestBody";
+import Authorization from './components/Authorization';
 const babyRedcolor = blue[20];
 
 function Home() {
     let [url, setURL] = useState("");
     let [method, setMethod] = useState("get");
     let [response, setResponse] = useState([]);
-    let [value, setValue] = useState('1');
+    let [tab1, setTab1] = useState("body");
     let [error, setError] = useState("");
     let [rowJson, setRowJson] = useState([]);
     let [status, setStatus] = useState("");
-
+    let [auth, setAuth] = useState(null);
     function axiosBasedOnMethod(method) {
         if (method === "post") {
             axios.post(`${url} `, rowJson)
@@ -55,6 +56,15 @@ function Home() {
     function onSubmit(e) {
         e.preventDefault();
         setResponse([])
+        // console.log(e.target.username.value);
+        console.log(rowJson);
+        if (auth) {
+            console.log("this is authorizedAPI");
+            console.log(auth);
+        } else {
+
+            console.log("NOT auth");
+        }
         if (url) {
             if (method === "get") {
                 axios.get(`${url} `)
@@ -90,15 +100,23 @@ function Home() {
     function handleMethod(e) {
         setMethod(e.target.value)
     }
-    function handleChange(e, newValue) {
-        setValue(newValue);
+    function handleTab(e, newValue) {
+        setTab1(newValue)
     }
     function handleBody(e) {
-        console.log(e.target.value)
         if (e.target.value) {
             setRowJson(JSON.stringify(e.target.value), () => {
                 console.log(rowJson)
             });
+        }
+    }
+    function handleAuth(username, password) {
+        // console.log(username === "" ? "yes empty" : "not empty");
+        if (username && password) {
+            const credentials = `${username}:${password}`;
+            const encodedCreds = Buffer.from(credentials).toString('base64');
+            let token = `Bearer ${encodedCreds}`;
+            setAuth(token);
         }
     }
     return (
@@ -106,18 +124,13 @@ function Home() {
             <div style={{ backgroundColor: babyRedcolor }} className="shadow">
                 <Container>
                     <Box p={2}>
-                        <Card boxShadow={1} borderRadius={2} >
+                        <Card elevation={3} style={{ borderRadius: '8px' }}>
                             <form onSubmit={onSubmit}>
-                                <Box
-                                    lg={{
-                                        maxWidth: '100%',
-                                    }}
-                                    p={1}
-                                >
+                                <Box lg={{maxWidth: '100%',}} p={1} >
                                     <FormControl>
-                                        <InputLabel id="demo-simple-select-label">Method</InputLabel>
+                                        <InputLabel id="method-select-label">Method</InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-label"
+                                            labelId="method-select-label"
                                             onChange={(e) => { handleMethod(e) }}
                                             value={method}
                                         >
@@ -128,57 +141,33 @@ function Home() {
                                             <MenuItem value="delete">DELETE</MenuItem>
                                         </Select>
                                     </FormControl>
-
+                                     {/* Endpoint */}
                                     <Box p={1}>
                                         <TextField fullWidth label="Enter request URL" variant="outlined" onChange={handleURL} />
                                     </Box>
                                     {/* Authentication */}
+                            
+                                 {/* Headers */}
+                                    {method !== 'get' && (
                                     <Box>
-                                        <TabContext >
+                                        <TabContext value={tab1}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                                <TabList aria-label="lab API tabs example">
-                                                    <Tab label="Authotization" value="1" />
-                                                    <Tab label="Body" value="2" />
-                                                    <Tab label="headers" value="3" />
+                                                <TabList onChange={handleTab} aria-label="lab API tabs example">
+                                                    <Tab label="Authotization" value="auth" />
+                                                    <Tab label="Body" value="body" />
+                                                    <Tab label="headers" value="headers" />
                                                 </TabList>
                                             </Box>
-                                            <TabPanel value="1">
-                                                <TextField
-                                                    fullWidth id="fullWidth" lg={{
-                                                        innerHeight: '100px',
-                                                    }}
-
-                                                    onChange={(e) => { handleBody(e) }}
-                                                />
+                                            <TabPanel value="body">
+                                                <RequestBody handleBody={handleBody} />
                                             </TabPanel>
-                                            <TabPanel value="2">Comming soon..</TabPanel>
-                                            <TabPanel value="3">Comming soon..</TabPanel>
+                                            <TabPanel value="auth">
+                                                <Authorization parentAuth={handleAuth} />
+                                            </TabPanel>
+                                            <TabPanel value="headers"> headers Comming soon..</TabPanel>
                                         </TabContext>
                                     </Box>
-                                    {/* Body */}
-                                    {
-                                        method === "get" || method === "delete" ? <p> {method} Request </p> :
-                                            <TabContext value={value}>
-                                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                                    <TabList onChange={handleChange} aria-label="lab API tabs example">
-                                                        <Tab label="JSON" value="1" />
-                                                        <Tab label="Text" value="2" />
-                                                        <Tab label="XML" value="3" />
-                                                    </TabList>
-                                                </Box>
-                                                <TabPanel value="1">
-                                                    <TextField
-                                                        fullWidth id="fullWidth" lg={{
-                                                            innerHeight: '100px',
-                                                        }}
-
-                                                        onChange={(e) => { handleBody(e) }}
-                                                    />
-                                                </TabPanel>
-                                                <TabPanel value="2">Comming soon..</TabPanel>
-                                                <TabPanel value="3">Comming soon..</TabPanel>
-                                            </TabContext>
-                                    }
+                                    )}
                                 </Box>
                                 <Box p={1}>
                                     <Button variant="contained" type="submit">Send</Button>
@@ -187,20 +176,19 @@ function Home() {
                             </form>
                             <Box sx={{ flexGrow: 1 }} p={2}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} md={4}>
+                                    <Grid item xs={12} md={3}>
                                         <StatusCode status={status} />
                                     </Grid>
-                                    <Grid item xs={12} md={8}>
+                                    <Grid item xs={12} md={9}>
                                         <Response response={response} />
                                     </Grid>
                                 </Grid>
                             </Box>
 
                         </Card>
-                    </Box>
+                    </Box >
                 </Container >
                 <Divider />
-
             </div >
 
         </>
