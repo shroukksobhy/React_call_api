@@ -23,6 +23,24 @@ function Home() {
     let [status, setStatus] = useState("");
     let [auth, setAuth] = useState(null);
     function axiosBasedOnMethod(method) {
+        const config = {
+            method: method,
+            url: url,
+            data: method !== 'get' ? rowJson : null, // Only include data if not a GET request
+            headers: auth ? { Authorization: auth } : {}, // Include auth headers if available
+        };
+    
+        axios(config)
+            .then(res => {
+                setStatus(res.status);
+                setResponse(res.data);
+            })
+            .catch(error => {
+                setStatus(error.response ? error.response.status : 500); // Handle cases where response is not available
+                setResponse(error.response ? error.response.data : "An error occurred");
+            });
+    }
+    function axiosBasedOnMethodOLD(method) {
         if (method === "post") {
             axios.post(`${url} `, rowJson)
                 .then(res => {
@@ -64,14 +82,15 @@ function Home() {
         try {
             if (url) {
                 if (method === "get") {
-                    axios.get(`${url} `)
-                        .then(res => {
-                            setStatus(res.status);
-                            setResponse(res.data);
-                        }).catch((error) => {
-                            setStatus(error.response.status);
-                            setResponse(error.response.data);
-                        });
+                    // axios.get(`${url} `)
+                    //     .then(res => {
+                    //         setStatus(res.status);
+                    //         setResponse(res.data);
+                    //     }).catch((error) => {
+                    //         setStatus(error.response.status);
+                    //         setResponse(error.response.data);
+                    //     });
+                    axiosBasedOnMethod(method);
                 }
                 else if (method === "post") {
                     axiosBasedOnMethod(method);
@@ -119,11 +138,14 @@ function Home() {
     }
     function handleAuth(username, password) {
         // console.log(username === "" ? "yes empty" : "not empty");
+        console.log(username);
+        console.log(password);
         if (username && password) {
             const credentials = `${username}:${password}`;
             const encodedCreds = Buffer.from(credentials).toString('base64');
             let token = `Bearer ${encodedCreds}`;
             setAuth(token);
+            console.log(token);
         }
     }
     return (
@@ -169,17 +191,18 @@ function Home() {
                                                     <Tab label="headers" value="headers" />
                                                 </TabList>
                                             </Box>
-                                            <TabPanel value="body">
-                                                <RequestBody handleBody={handleBody} />
-                                            </TabPanel>
                                             <TabPanel value="auth">
                                                 <Authorization parentAuth={handleAuth} />
                                             </TabPanel>
-                                            <TabPanel value="headers"> headers Comming soon..</TabPanel>
+                                            <TabPanel value="body">
+                                                <RequestBody handleBody={handleBody} />
+                                            </TabPanel>
+                                            <TabPanel value="headers"> headers comming soon...</TabPanel>
                                         </TabContext>
                                     </Box>
                                     )}
                             </form>
+                            {/* Response */}
                             <Box sx={{ flexGrow: 1 }} p={2}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} md={3}>
