@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert } from '@mui/material';
+import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert, CircularProgress, Paper } from '@mui/material';
 import axios from 'axios';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -9,6 +9,7 @@ import StatusCode from "./components/StatusCode";
 import Response from "./components/Response";
 import RequestBody from "./components/RequestBody";
 import Authorization from './components/Authorization';
+
 const babyRedcolor = blue[20];
 
 function Home() {
@@ -126,8 +127,8 @@ function Home() {
                     <Box p={2}>
                         <Card elevation={3} style={{ borderRadius: '8px' }}>
                             <form onSubmit={onSubmit}>
-                                <Box lg={{maxWidth: '100%',}} p={1} >
-                                    <FormControl>
+                                <Box display="flex" alignItems="center" m={2} >
+                                    <FormControl style={{ marginRight: '8px' }}>
                                         <InputLabel id="method-select-label">Method</InputLabel>
                                         <Select
                                             labelId="method-select-label"
@@ -142,13 +143,17 @@ function Home() {
                                         </Select>
                                     </FormControl>
                                      {/* Endpoint */}
-                                    <Box p={1}>
-                                        <TextField fullWidth label="Enter request URL" variant="outlined" onChange={handleURL} />
-                                    </Box>
-                                    {/* Authentication */}
+                                     <Box style={{ marginRight: '8px', flexGrow: 1 }}>
+                                     <TextField fullWidth label="Enter request URL" variant="outlined" onChange={handleURL} />
+                                    </Box>                            
+                                     {/* Headers */}
                             
-                                 {/* Headers */}
-                                    {method !== 'get' && (
+                                     <Button variant="contained" type="submit">Send</Button>
+                                </Box>
+                               
+                                {error && <Alert severity="error">{error}</Alert>}
+
+                                {method !== 'get' && (
                                     <Box>
                                         <TabContext value={tab1}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -168,11 +173,6 @@ function Home() {
                                         </TabContext>
                                     </Box>
                                     )}
-                                </Box>
-                                <Box p={1}>
-                                    <Button variant="contained" type="submit">Send</Button>
-                                </Box>
-                                {error && <Alert severity="error">{error}</Alert>}
                             </form>
                             <Box sx={{ flexGrow: 1 }} p={2}>
                                 <Grid container spacing={2}>
@@ -182,8 +182,28 @@ function Home() {
                                     <Grid item xs={12} md={9}>
                                         <Response response={response} />
                                     </Grid>
+                                 
                                 </Grid>
                             </Box>
+
+                            {/* <Box sx={{ flexGrow: 1 }} p={2}>
+    <Paper elevation={2} sx={{ padding: 2 }}>
+        <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
+                <StatusCode status={status} />
+            </Grid>
+            <Grid item xs={12} md={9}>
+                {loading ? (
+                    <CircularProgress />
+                ) : error ? (
+                    <Alert severity="error">{error}</Alert>
+                ) : (
+                    <Response response={response} />
+                )}
+            </Grid>
+        </Grid>
+    </Paper>
+</Box> */}
 
                         </Card>
                     </Box >

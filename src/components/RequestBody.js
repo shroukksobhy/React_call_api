@@ -23,7 +23,6 @@ function RequestBody({ handleBody }) {
                         fullWidth id="fullWidth" lg={{
                             innerHeight: '100px',
                         }}
-
                         onChange={(e) => { handleBody(e) }}
                     />
                 </TabPanel>
@@ -33,5 +32,4 @@ function RequestBody({ handleBody }) {
         </div>
     )
 }
-
 export default RequestBody
