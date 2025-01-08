@@ -29,11 +29,20 @@ function Home() {
             data: method !== 'get' ? rowJson : null, // Only include data if not a GET request
             headers: auth ? { Authorization: auth } : {}, // Include auth headers if available
         };
-    
+        console.log(rowJson);
         axios(config)
             .then(res => {
-                setStatus(res.status);
-                setResponse(res.data);
+                console.log(res);
+                if (res.data === "" || typeof res.data !== 'object' || res.data === null) {
+                    const noContentMessage = {
+                        message: 'No content available from the API.'
+                    };
+                    setStatus(res.status);
+                    setResponse(noContentMessage);
+                } else {
+                    setStatus(res.status);
+                    setResponse(res.data);
+                }
             })
             .catch(error => {
                 setStatus(error.response ? error.response.status : 500); // Handle cases where response is not available
@@ -68,7 +77,7 @@ function Home() {
                 else if (method === "delete") {
                     axiosBasedOnMethod(method)
                 }
-    
+
             } else {
                 setError("Endpoint is required")
             }
@@ -97,10 +106,9 @@ function Home() {
         setTab1(newValue)
     }
     function handleBody(e) {
-        if (e.target.value) {
-            setRowJson(JSON.stringify(e.target.value), () => {
-                console.log(rowJson)
-            });
+        console.log(e.target.value);
+        if (e.target.value !== "") {
+            setRowJson(JSON.stringify(e.target.value));
         }
     }
     function handleAuth(username, password) {
@@ -137,15 +145,15 @@ function Home() {
                                             <MenuItem value="delete">DELETE</MenuItem>
                                         </Select>
                                     </FormControl>
-                                     {/* Endpoint */}
-                                     <Box style={{ marginRight: '8px', flexGrow: 1 }}>
-                                     <TextField fullWidth label="Enter request URL" variant="outlined" onChange={handleURL} />
-                                    </Box>                            
-                                     {/* Headers */}
-                            
-                                     <Button variant="contained" type="submit">Send</Button>
+                                    {/* Endpoint */}
+                                    <Box style={{ marginRight: '8px', flexGrow: 1 }}>
+                                        <TextField fullWidth label="Enter request URL" variant="outlined" onChange={handleURL} />
+                                    </Box>
+                                    {/* Headers */}
+
+                                    <Button variant="contained" type="submit">Send</Button>
                                 </Box>
-                               
+
                                 {error && <Alert severity="error">{error}</Alert>}
 
                                 {method !== 'get' && (
@@ -167,7 +175,7 @@ function Home() {
                                             <TabPanel value="headers"> headers comming soon...</TabPanel>
                                         </TabContext>
                                     </Box>
-                                    )}
+                                )}
                             </form>
                             {/* Response */}
                             <Box sx={{ flexGrow: 1 }} p={2}>
@@ -175,18 +183,18 @@ function Home() {
                                     <Grid item xs={12} md={3}>
                                         <StatusCode status={status} />
                                     </Grid>
-                                    
+
                                     <Grid item xs={12} md={9}>
                                         {loading ? (
                                             <CircularProgress />
-                                        ) 
-                                        : error ? (
-                                            <Alert severity="error">{error}</Alert>
                                         )
-                                         : (
-                                            <Response response={response} />
-                                        )}
-                                      </Grid>
+                                            : error ? (
+                                                <Alert severity="error">{error}</Alert>
+                                            )
+                                                : (
+                                                    <Response response={response} />
+                                                )}
+                                    </Grid>
                                 </Grid>
                             </Box>
                         </Card>
