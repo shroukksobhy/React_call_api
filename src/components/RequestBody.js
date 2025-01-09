@@ -26,8 +26,8 @@ function RequestBody({ handleBody }) {
                         onChange={(e) => { handleBody(e) }}
                     />
                 </TabPanel>
-                <TabPanel value="text">Comming soon..</TabPanel>
-                <TabPanel value="xml">Comming soon..</TabPanel>
+                <TabPanel value="text">Coming soon..</TabPanel>
+                <TabPanel value="xml">Coming soon..</TabPanel>
             </TabContext>
         </div>
     )
