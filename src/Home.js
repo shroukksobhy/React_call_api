@@ -19,7 +19,7 @@ function Home() {
     let [tab1, setTab1] = useState("body");
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState("");
-    let [rowJson, setRowJson] = useState([]);
+    let [rowJson, setRowJson] = useState({});
     let [status, setStatus] = useState("");
     let [auth, setAuth] = useState(null);
     function axiosBasedOnMethod(method) {
@@ -27,10 +27,16 @@ function Home() {
             method: method,
             url: url,
             data: method !== 'get' ? rowJson : null, // Only include data if not a GET request
-            headers: auth ? { Authorization: auth } : {}, // Include auth headers if available
+            headers: {
+                'Accept': '*/*',
+                'Content-Type': 'application/json',
+                ...(auth ? { Authorization: auth } : {}) // Include auth headers if available
+            }
+            //* headers: auth ? { Authorization: auth } : {}, // Include auth headers if available */
         };
-        console.log(rowJson);
-        axios(config)
+        console.log("Request Config:", config); // Log the request config for debugging
+        console.log("Row JSON:", rowJson); // Log the JSON body for debugging
+            axios(config)
             .then(res => {
                 console.log(res);
                 if (res.data === "" || typeof res.data !== 'object' || res.data === null) {
@@ -45,6 +51,8 @@ function Home() {
                 }
             })
             .catch(error => {
+                console.error("Error:", error); // Log the error for debugging
+
                 setStatus(error.response ? error.response.status : 500); // Handle cases where response is not available
                 setResponse(error.response ? error.response.data : "An error occurred");
             });
@@ -58,14 +66,6 @@ function Home() {
         try {
             if (url) {
                 if (method === "get") {
-                    // axios.get(`${url} `)
-                    //     .then(res => {
-                    //         setStatus(res.status);
-                    //         setResponse(res.data);
-                    //     }).catch((error) => {
-                    //         setStatus(error.response.status);
-                    //         setResponse(error.response.data);
-                    //     });
                     axiosBasedOnMethod(method);
                 }
                 else if (method === "post") {
@@ -150,7 +150,6 @@ function Home() {
                                         <TextField fullWidth label="Enter request URL" variant="outlined" onChange={handleURL} />
                                     </Box>
                                     {/* Headers */}
-
                                     <Button variant="contained" type="submit">Send</Button>
                                 </Box>
 

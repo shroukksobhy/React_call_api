@@ -9,11 +9,28 @@ function Response({ response }) {
         padding: theme.spacing(1),
         textAlign: 'center',
         color: theme.palette.text.secondary,
+        borderRadius: 3,
+        display: 'block',
+        fontSize: 15,
+        height: 'auto',
+        margin: '7%',
+        maxHeight: 400,
+        maxWidth: '100vw',
+        overflow: 'scroll',
+        paddingBottom: 30,
+        paddingTop: 30,
+
     }));
     return (
         <div>
             <Item>
-                <ReactJson src={response} />
+                {/* <ReactJson src={response} /> */}
+                <ReactJson
+                    src={response}
+                    collapsed={false}
+                    displayDataTypes={false}
+                    // theme="monokai"
+                />
             </Item>
 
 

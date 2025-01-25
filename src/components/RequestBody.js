@@ -20,9 +20,10 @@ function RequestBody({ handleBody }) {
                 </Box>
                 <TabPanel value="json">
                     <TextField
-                        fullWidth id="fullWidth" lg={{
-                            innerHeight: '100px',
-                        }}
+                        fullWidth
+                        id="fullWidth"
+                        multiline
+                        rows={10} // Adjust the number of rows as needed
                         onChange={(e) => { handleBody(e) }}
                     />
                 </TabPanel>
