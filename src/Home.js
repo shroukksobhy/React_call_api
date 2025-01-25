@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert, CircularProgress } from '@mui/material';
+import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert, CircularProgress, Typography } from '@mui/material';
 import axios from 'axios';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -127,6 +127,7 @@ function Home() {
         <>
             <div style={{ backgroundColor: babyRedcolor }} className="shadow">
                 <Container>
+                    <Typography variant="h4" align="center" style={{ padding: '16px' }}>API Tester</Typography>
                     <Box p={2}>
                         <Card elevation={3} style={{ borderRadius: '8px' }}>
                             <form onSubmit={onSubmit}>
