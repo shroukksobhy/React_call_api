@@ -6,12 +6,14 @@ This project is an API request tool developed with React, designed to simplify t
 
 You can see the application in action by visiting the following link:
 
-[Open Live Demo](https://reactcallapi.netlify.app/)
+[Open Live Demo-React Call API](https://reactcallapi.netlify.app/)
 
 ## Features
 
 - Perform API requests using either GET, POST,PUT, DELETE methods.
-- Handle different HTTP response statuses.
+- View formatted JSON responses
+- Handle authentication headers
+- Display status codes and error messages
 - User-friendly interface for displaying API data.
 
 ## Technology Stack
@@ -28,6 +30,17 @@ cd Advice-app-ReactJS
 npm install
 npm start
 ```
+## Usage
+
+Enter the API endpoint URL.
+
+Select the HTTP method.
+
+Optionally, add request headers and body.
+
+Click the "Send" button to make the request.
+
+View the response in the formatted JSON view.
 
 ### Author
 
