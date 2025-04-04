@@ -26,7 +26,7 @@ You can see the application in action by visiting the following link:
 ## Installation Instructions
 ```bash
 git clone https://github.com/shroukksobhy/React_call_api.git
-cd Advice-app-ReactJS
+cd React_call_api
 npm install
 npm start
 ```
