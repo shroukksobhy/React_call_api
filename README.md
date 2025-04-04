@@ -12,6 +12,8 @@ You can see the application in action by visiting the following link:
 
 - Perform API requests using either GET, POST,PUT, DELETE methods.
 - View formatted JSON responses
+- Check the response time
+- Check the response status
 - Handle authentication headers
 - Display status codes and error messages
 - User-friendly interface for displaying API data.
