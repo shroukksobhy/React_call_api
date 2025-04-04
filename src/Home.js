@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { Card, Tab, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert, CircularProgress, Typography } from '@mui/material';
+import { Card, Box, Divider, MenuItem, Select, InputLabel, FormControl, Grid, Button, TextField, Container, Alert, CircularProgress, Typography } from '@mui/material';
 import axios from 'axios';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
 import { blue } from '@mui/material/colors';
 import StatusCode from "./components/StatusCode";
 import Response from "./components/Response";
 import RequestBody from "./components/RequestBody";
-import Authorization from './components/Authorization';
+// import Authorization from './components/Authorization';
 
 const babyRedcolor = blue[20];
 
@@ -16,12 +13,12 @@ function Home() {
     let [url, setURL] = useState("");
     let [method, setMethod] = useState("get");
     let [response, setResponse] = useState([]);
-    let [tab1, setTab1] = useState("body");
+    // let [tab1, setTab1] = useState("body");
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState("");
     let [rowJson, setRowJson] = useState({});
     let [status, setStatus] = useState("");
-    let [auth, setAuth] = useState(null);
+    // let [auth, setAuth] = useState(null);
     function axiosBasedOnMethod(method) {
         const config = {
             method: method,
@@ -30,7 +27,7 @@ function Home() {
             headers: {
                 'Accept': '*/*',
                 'Content-Type': 'application/json',
-                ...(auth ? { Authorization: auth } : {}) // Include auth headers if available
+                // ...(auth ? { Authorization: auth } : {}) // Include auth headers if available
             }
             //* headers: auth ? { Authorization: auth } : {}, // Include auth headers if available */
         };
@@ -102,27 +99,27 @@ function Home() {
     function handleMethod(e) {
         setMethod(e.target.value)
     }
-    function handleTab(e, newValue) {
-        setTab1(newValue)
-    }
+    // function handleTab(e, newValue) {
+    //     setTab1(newValue)
+    // }
     function handleBody(e) {
         console.log(e.target.value);
         if (e.target.value !== "") {
             setRowJson(JSON.stringify(e.target.value));
         }
     }
-    function handleAuth(username, password) {
-        // console.log(username === "" ? "yes empty" : "not empty");
-        console.log(username);
-        console.log(password);
-        if (username && password) {
-            const credentials = `${username}:${password}`;
-            const encodedCreds = Buffer.from(credentials).toString('base64');
-            let token = `Bearer ${encodedCreds}`;
-            setAuth(token);
-            console.log(token);
-        }
-    }
+    // function handleAuth(username, password) {
+    //     // console.log(username === "" ? "yes empty" : "not empty");
+    //     console.log(username);
+    //     console.log(password);
+    //     if (username && password) {
+    //         const credentials = `${username}:${password}`;
+    //         const encodedCreds = Buffer.from(credentials).toString('base64');
+    //         let token = `Bearer ${encodedCreds}`;
+    //         setAuth(token);
+    //         console.log(token);
+    //     }
+    // }
     return (
         <>
             <div style={{ backgroundColor: babyRedcolor }} className="shadow">
@@ -158,7 +155,10 @@ function Home() {
                                 {error && <Alert severity="error">{error}</Alert>}
 
                                 {method !== 'get' && (
+                                    <>
                                     <RequestBody handleBody={handleBody} />
+                                    {/* <Authorization parentAuth={handleAuth} /> */}
+                                    </>
 
                                     /*<Box>
                                         <TabContext value={tab1}>
