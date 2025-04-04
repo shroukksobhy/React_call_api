@@ -8,6 +8,9 @@ function RequestBody({ handleBody }) {
     function handleChange(e, newValue) {
         setValue(newValue);
     }
+    // function handleBody(e) {
+    //     setBody(e.target.value);
+    // }
     return (
         <div>
             <TabContext value={value}>
@@ -21,10 +24,12 @@ function RequestBody({ handleBody }) {
                 <TabPanel value="json">
                     <TextField
                         fullWidth
-                        id="fullWidth"
+                        label="Request Body"
+                        variant="outlined"
                         multiline
-                        rows={10} // Adjust the number of rows as needed
+                        rows={10}
                         onChange={(e) => { handleBody(e) }}
+                        placeholder="Enter JSON data here"
                     />
                 </TabPanel>
                 <TabPanel value="text">Coming soon..</TabPanel>

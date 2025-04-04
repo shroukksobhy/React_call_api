@@ -30,6 +30,42 @@ function StatusCode({ status }) {
             color = 'error.main';
             message = 'Server Error';
             break;
+        case 503:
+            color = 'error.main';
+            message = 'Service Unavailable';
+            break;
+        case 400:
+            color = 'error.main';
+            message = 'Bad Request';
+            break;
+        case 401:
+            color = 'error.main';
+            message = 'Unauthorized';
+            break;
+        case 403:
+            color = 'error.main';
+            message = 'Forbidden';
+            break;
+        case 408:
+            color = 'warning.main';
+            message = 'Request Timeout';
+            break;
+        case 429:
+            color = 'warning.main';
+            message = 'Too Many Requests';
+            break;
+        case 422:
+            color = 'error.main';
+            message = 'Unprocessable Entity';
+            break;
+        case 304:
+            color = 'info.main';
+            message = 'Not Modified';
+            break;
+        case 100:
+            color = 'info.main';
+            message = 'Continue';
+            break;  
         default:
             color = 'info.main';
             message = 'Unknown Status';

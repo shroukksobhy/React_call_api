@@ -36,7 +36,7 @@ function Home() {
         };
         console.log("Request Config:", config); // Log the request config for debugging
         console.log("Row JSON:", rowJson); // Log the JSON body for debugging
-            axios(config)
+        axios(config)
             .then(res => {
                 console.log(res);
                 if (res.data === "" || typeof res.data !== 'object' || res.data === null) {
@@ -127,7 +127,8 @@ function Home() {
         <>
             <div style={{ backgroundColor: babyRedcolor }} className="shadow">
                 <Container>
-                    <Typography variant="h4" align="center" style={{ padding: '16px' }}>API Tester</Typography>
+                    <Typography variant="h4" align="center" style={{ padding: '16px' }}>REST API Tester</Typography>
+                    <Typography variant="h6" align="center" style={{ padding: '10px' }}>Use this tool to quickly test and validate REST API endpoints of your website with a single click.</Typography>
                     <Box p={2}>
                         <Card elevation={3} style={{ borderRadius: '8px' }}>
                             <form onSubmit={onSubmit}>
@@ -157,7 +158,9 @@ function Home() {
                                 {error && <Alert severity="error">{error}</Alert>}
 
                                 {method !== 'get' && (
-                                    <Box>
+                                    <RequestBody handleBody={handleBody} />
+
+                                    /*<Box>
                                         <TabContext value={tab1}>
                                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                                 <TabList onChange={handleTab} aria-label="lab API tabs example">
@@ -175,6 +178,7 @@ function Home() {
                                             <TabPanel value="headers"> headers comming soon...</TabPanel>
                                         </TabContext>
                                     </Box>
+                                    */
                                 )}
                             </form>
                             {/* Response */}
