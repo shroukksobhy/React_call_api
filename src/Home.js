@@ -18,6 +18,7 @@ function Home() {
     let [error, setError] = useState("");
     let [rowJson, setRowJson] = useState({});
     let [status, setStatus] = useState("");
+    let [responseTime, setResponseTime] = useState(0);
     // let [auth, setAuth] = useState(null);
     function axiosBasedOnMethod(method) {
         const config = {
@@ -33,6 +34,8 @@ function Home() {
         };
         console.log("Request Config:", config); // Log the request config for debugging
         console.log("Row JSON:", rowJson); // Log the JSON body for debugging
+        const startTime = performance.now(); // Record the start time
+
         axios(config)
             .then(res => {
                 console.log(res);
@@ -43,8 +46,12 @@ function Home() {
                     setStatus(res.status);
                     setResponse(noContentMessage);
                 } else {
+                    const endTime = performance.now(); // Record the end time
+                    const responseTime = endTime - startTime; // Calculate response time
+                    console.log('Response Time:', responseTime.toFixed(2), 'ms');
                     setStatus(res.status);
                     setResponse(res.data);
+                    setResponseTime(responseTime.toFixed(2), 'ms'); // Set the response time in state
                 }
             })
             .catch(error => {
@@ -186,6 +193,7 @@ function Home() {
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} md={3}>
                                         <StatusCode status={status} />
+                                        <Typography variant="h6" align="center" style={{ padding: '16px' }}>Response Time {responseTime}</Typography>
                                     </Grid>
 
                                     <Grid item xs={12} md={9}>
