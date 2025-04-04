@@ -17,7 +17,7 @@ function Home() {
     let [loading, setLoading] = useState(false);
     let [error, setError] = useState("");
     let [rowJson, setRowJson] = useState({});
-    let [status, setStatus] = useState("");
+    let [status, setStatus] = useState(0);
     let [responseTime, setResponseTime] = useState(0);
     // let [auth, setAuth] = useState(null);
     function axiosBasedOnMethod(method) {
