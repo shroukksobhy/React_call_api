@@ -192,7 +192,7 @@ function Home() {
                             <Box sx={{ flexGrow: 1 }} p={2}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} md={3}>
-                                        <StatusCode status={parseInt(status)} /> // Convert status to a number
+                                        <StatusCode status={parseInt(status)} /> 
                                         <Typography variant="h6" align="center" style={{ padding: '16px' }}>Response Time {responseTime}</Typography>
                                     </Grid>
 
